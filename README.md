@@ -11,7 +11,16 @@ A robust Discord bot that archives channel attachments, supports concurrent down
 - 🛑 **Control**: Stop specific downloads or clear the entire queue
 - 🔔 **Notifications**: Get a DM when your download queue finishes
 - ⏱️ **Rate Limiting**: Configurable delay to prevent API spam
-- 🔄 **Resilient**: Handles expired tokens for long-running jobs automatically
+    - 🔄 **Resilient**: Handles expired tokens for long-running jobs automatically
+
+## 🔒 Privacy & Usage
+
+> [!IMPORTANT]
+> **This bot downloads files directly to the computer running the script.**
+
+- **Personal Use Only**: It is designed for single-user archiving.
+- **Host Storage**: Files are saved to the local drive of the host machine.
+- **Restricted Access**: Commands are restricted to the `OWNER_ID` specified in the configuration. Other users cannot trigger downloads.
 
 ## Setup
 
@@ -33,8 +42,8 @@ DISCORD_TOKEN=your_token_here
 # Directory to save files
 DOWNLOAD_DIRECTORY=./downloads
 
-# Your User ID for completion notifications
-NOTIFICATION_USER_ID=123456789012345678
+# Your User ID (Required) - Restricts usage to you only
+OWNER_ID=123456789012345678
 ```
 
 ### 3. Run the Bot

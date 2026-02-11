@@ -21,6 +21,7 @@ class Archiver(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.download_delay = Config.DOWNLOAD_DELAY
+        self.owner_id = int(Config.OWNER_ID) if Config.OWNER_ID else None
         self.download_queues = {}  # Queue of download jobs per user_id
         self.active_downloads = {}  # Track currently processing download by user_id
         self.queue_locks = {}  # Locks to prevent race conditions
@@ -176,11 +177,11 @@ class Archiver(commands.Cog):
             if user_id in self.download_queues and not self.download_queues[user_id]:
                 del self.download_queues[user_id]
                 
-                # Notify user if configured
-                if Config.NOTIFICATION_USER_ID:
+                # Notify owner
+                if self.owner_id:
                     try:
                         # Fetch user to notify
-                        target_user = await self.bot.fetch_user(int(Config.NOTIFICATION_USER_ID))
+                        target_user = await self.bot.fetch_user(self.owner_id)
                         if target_user:
                             msg = (f"✅ **All queued downloads complete!**\n"
                                    f"📂 Your archive is ready in: `{Config.DOWNLOAD_DIRECTORY}`")
@@ -421,6 +422,15 @@ class Archiver(commands.Cog):
             interaction: Discord interaction object
         """
         # Defer response since this will take time
+        # Check authorization
+        if interaction.user.id != self.owner_id:
+            await interaction.response.send_message(
+                "⛔ **Access Denied**\n"
+                "This bot is private and can only be used by its owner.",
+                ephemeral=True
+            )
+            return
+
         await interaction.response.defer(ephemeral=False)
         
         user_id = interaction.user.id
@@ -531,6 +541,15 @@ class Archiver(commands.Cog):
             interaction: Discord interaction object
         """
         user_id = interaction.user.id
+
+        # Check authorization
+        if user_id != self.owner_id:
+            await interaction.response.send_message(
+                "⛔ **Access Denied**\n"
+                "This bot is private and can only be used by its owner.",
+                ephemeral=True
+            )
+            return
         
         has_active = user_id in self.active_downloads
         has_queue = user_id in self.download_queues and self.download_queues[user_id]
@@ -578,6 +597,15 @@ class Archiver(commands.Cog):
         """
         user_id = interaction.user.id
         
+        # Check authorization
+        if user_id != self.owner_id:
+            await interaction.response.send_message(
+                "⛔ **Access Denied**\n"
+                "This bot is private and can only be used by its owner.",
+                ephemeral=True
+            )
+            return
+        
         has_active = user_id in self.active_downloads
         has_queue = user_id in self.download_queues and self.download_queues[user_id]
         
@@ -624,6 +652,15 @@ class Archiver(commands.Cog):
             interaction: Discord interaction object
         """
         user_id = interaction.user.id
+        
+        # Check authorization
+        if user_id != self.owner_id:
+            await interaction.response.send_message(
+                "⛔ **Access Denied**\n"
+                "This bot is private and can only be used by its owner.",
+                ephemeral=True
+            )
+            return
         
         has_queue = user_id in self.download_queues and self.download_queues[user_id]
         

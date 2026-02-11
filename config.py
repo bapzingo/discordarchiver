@@ -24,8 +24,8 @@ class Config:
     except ValueError:
         DOWNLOAD_DELAY = 0.25
     
-    # User ID to notify when queue finishes (optional)
-    NOTIFICATION_USER_ID = os.getenv('NOTIFICATION_USER_ID')
+    # Owner ID (required) - Only this user can use the bot
+    OWNER_ID = os.getenv('OWNER_ID')
     
     @classmethod
     def validate(cls):
@@ -35,6 +35,12 @@ class Config:
                 "DISCORD_TOKEN is not set in .env file!\n"
                 "Please add your bot token from https://discord.com/developers/applications"
             )
+            
+        if not cls.OWNER_ID:
+            raise ValueError(
+                "OWNER_ID is not set in .env file!\n"
+                "Please add your User ID to restrict access to the bot and enable notifications."
+            )
         
         # Create download directory if it doesn't exist
         download_path = Path(cls.DOWNLOAD_DIRECTORY)
@@ -43,6 +49,7 @@ class Config:
         print(f"✅ Configuration loaded:")
         print(f"   Download directory: {download_path.absolute()}")
         print(f"   Download delay: {cls.DOWNLOAD_DELAY}s")
+        print(f"   Owner ID: {cls.OWNER_ID}")
 
 # Validate configuration on import
 Config.validate()
