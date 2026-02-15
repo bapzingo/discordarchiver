@@ -56,7 +56,8 @@ python bot.py
 
 | Command | Description |
 |---------|-------------|
-| `/download` | Queue the current channel (and its threads) for archiving |
+| `/download` | Incremental download (stops when it sees a message from this bot) |
+| `/downloadall` | Queue the current channel (and its threads) for archiving |
 | `/queue` | View your current download queue status |
 | `/stop` | Cancel the currently active download |
 | `/clearqueue` | Clear all pending downloads without stopping the current one |

@@ -1,6 +1,6 @@
 """
 Discord Archiver Bot - Main Entry Point
-Downloads all attachments from a channel using /download command.
+Downloads all attachments from a channel using /downloadall command.
 """
 import discord
 from discord.ext import commands
